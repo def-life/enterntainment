@@ -40,7 +40,7 @@ export default function MovieCard(props: MovieCardProps) {
 
     return (
         <div
-            className={cn("relative", className)}
+            className={cn("relative inline-block", className)}
             {...rest}
         >
             {/* Image */}

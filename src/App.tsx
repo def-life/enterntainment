@@ -4,7 +4,21 @@ import { Button } from "./components/ui/button";
 
 export default function App() {
   return <>
-    <MovieCard orientation="horizontal" channel={true} imageUrls={["/channel.png", "/channel.png", "/channel.png", "/channel.png",]} />
-    {/* <ChannelCard channel={["/channel.png", "/channel.png", "/channel.png", "/channel.png"]} /> */}
+    <div className="flex  gap-[15px]">
+      {/* <MovieCard orientation="horizontal" channel={true} imageUrls={["/movie.png", "/movie.png", "/movie.png", "/movie.png",]} />
+      <MovieCard orientation="vertical" imageUrls={["/movie.png"]} channel={false} />
+      <MovieCard orientation="horizontal" imageUrls={["/movie.png"]} channel={false} /> */}
+      <MovieCard orientation="horizontal" imageUrls={["/movie.png"]} channel={true} />
+      <MovieCard orientation="horizontal" imageUrls={["/movie.png"]} channel={true} />
+
+      <MovieCard orientation="horizontal" imageUrls={["/movie.png"]} channel={true} />
+
+      <MovieCard orientation="horizontal" imageUrls={["/movie.png"]} channel={true} />
+
+      <MovieCard orientation="horizontal" imageUrls={["/movie.png"]} channel={true} />
+
+      {/* <MovieCard orientation="horizontal" imageUrls={["/movie.png"]} channel={true} logoUrl={false} /> */}
+    </div>
+
   </>;
 }
