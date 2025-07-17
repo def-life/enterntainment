@@ -31,40 +31,45 @@ const cardSizeVariants = cva(
     }
 );
 
+const imageVariants = cva(
+    "object-cover bg-[#363636]", {
+    variants: {
+        layout: {
+            movieThumbnail: "w-full h-full rounded-lg",
+            singleChannel: "w-[64px] h-[64px] sm:w-[88px] sm:h-[88px] rounded-full",
+            multipleChannel: "w-8 h-8 sm:w-[54px] sm:h-[54px] rounded-full"
+        }
+
+    },
+    defaultVariants: {
+        layout: "movieThumbnail"
+    }
+},
+)
+
+const VISIBLE_IMAGES_LIMIT = 3
+
 
 export default function MovieCard(props: MovieCardProps) {
     const { title = "MoonWalker", price = 100, imageUrls, className,
-        channel, logoUrl = true, orientation = "horizontal", ...rest } = props
+        channel, logoUrl, orientation = "horizontal", ...rest } = props
 
-    const slicedChannel = imageUrls.slice(0, 3)
-
+    const visibleImages = imageUrls.slice(0, VISIBLE_IMAGES_LIMIT)
+    const layout = channel ? imageUrls.length === 1 ? "singleChannel" : "multipleChannel" : "movieThumbnail";
+    const showComboBadge = imageUrls.length > 1;
     return (
         <div
             className={cn("relative inline-block", className)}
             {...rest}
         >
-            {/* Image */}
-            {/* <div className={cn(cardSizeVariants({ orientation }),)}>
-                {<img
-                    src={imageUrl}
-                    alt={`${title} poster`}
-                    className="w-full h-full object-cover bg-gray-400 rounded-lg"
-                />}
-            </div> */}
-
             <div className={cn(cardSizeVariants({ orientation }), "bg-[#363636]")}>
                 {
-                    slicedChannel.map((url: string, index) => {
+                    visibleImages.map((url: string, index) => {
                         return <img
-                            key={url}
-                            src={url}
+                            key={`${url}-${index}`} src={url}
                             alt={`${title} poster`}
                             className={
-                                cn("w-full h-full object-cover bg-[#363636] rounded-lg", {
-                                    "w-[64px] h-[64px] sm:w-[88px] sm:h-[88px] rounded-full": channel,
-                                    "w-8 h-8 sm:w-[54px] sm:h-[54px] rounded-full": channel && imageUrls.length > 1
-
-                                })
+                                cn(imageVariants({ layout }))
                             }
                         />
                     })
@@ -82,7 +87,7 @@ export default function MovieCard(props: MovieCardProps) {
             </div>
             {logoUrl && <img src="/logo.png" className="w-6 h-6 rounded-full object-cover absolute top-[4%] right-[4%]" />}
 
-            {imageUrls.length > 1 && <div
+            {showComboBadge && <div
                 style={{ backgroundImage: 'linear-gradient(to right, #E8B200, #FFA52F)' }}
                 className="w-[50px] h-[18px] sm:w-[84px] sm:h-[25px] sm:text-sm text-black absolute text-[10px] flex justify-center items-center bg-gradient-to-l top-[5%] left-0 ">Combo</div>}
         </div>

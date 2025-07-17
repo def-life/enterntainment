@@ -8,7 +8,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        outline:
+        outlined:
           "border border-white rounded-lg bg-black",
         contained: "bg-[var(--primary)] rounded-lg text-white",
         text: ""
@@ -27,17 +27,19 @@ const buttonVariants = cva(
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
   VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
+  children: React.ReactNode,
+  variant: "outlined" | "contained" | "text",
+  
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ children, className, variant, size, ...props }, ref) => {
     return (
       <button
         className={cn(buttonVariants({ variant, size }), className)}
         ref={ref}
         {...props}
-      />
+      >{children}</button>
     );
   }
 );
