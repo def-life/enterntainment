@@ -16,15 +16,21 @@ export interface MovieCardProps
 
 }
 
-const cardSizeVariants = cva(
-    "mb-[10px] flex justify-center items-center gap-[3.3px]",
+const imageContainerVariants = cva(
+    "mb-[10px] flex justify-center items-center",
     {
         variants: {
             orientation: {
                 horizontal: "w-[178px] h-[100px] sm:h-[148px] sm:w-[263px]",
                 vertical: "w-[130px] h-[238px] sm:w-[164px] sm:h-[246px]"
             },
+            kind: {
+                channel: "gap-[3.3px]",
+                thumbnail: ""
+            },
         },
+
+
         defaultVariants: {
             orientation: "horizontal",
         },
@@ -37,7 +43,8 @@ const imageVariants = cva(
         layout: {
             movieThumbnail: "w-full h-full rounded-lg",
             singleChannel: "w-[64px] h-[64px] sm:w-[88px] sm:h-[88px] rounded-full",
-            multipleChannel: "w-8 h-8 sm:w-[54px] sm:h-[54px] rounded-full"
+            multipleChannel: "w-8 h-8 sm:w-[54px] sm:h-[54px] rounded-full",
+            multipleThumbnail: "w-[40%] h-full"
         }
 
     },
@@ -55,28 +62,40 @@ export default function MovieCard(props: MovieCardProps) {
         channel, logoUrl, orientation = "horizontal", ...rest } = props
 
     const visibleImages = imageUrls.slice(0, VISIBLE_IMAGES_LIMIT)
-    const layout = channel ? imageUrls.length === 1 ? "singleChannel" : "multipleChannel" : "movieThumbnail";
+    const layout = channel
+        ? imageUrls.length === 1
+            ? "singleChannel"
+            : "multipleChannel"
+        : imageUrls.length > 1
+            ? "multipleThumbnail"
+            : "movieThumbnail";
+    ;
     const showComboBadge = imageUrls.length > 1;
+    const kind = channel ? "channel" : "thumbnail"
     return (
         <div
             className={cn("relative inline-block", className)}
             {...rest}
         >
-            <div className={cn(cardSizeVariants({ orientation }), "bg-[#363636]")}>
+            <div className={cn(imageContainerVariants({ orientation, kind }), "bg-[#363636]")}>
                 {
                     visibleImages.map((url: string, index) => {
                         return <img
                             key={`${url}-${index}`} src={url}
                             alt={`${title} poster`}
                             className={
-                                cn(imageVariants({ layout }))
+                                cn(imageVariants({ layout }), 
+                                    layout === "multipleThumbnail" && index !== 0 && "-ml-[10%]"
+
+                                )
                             }
+                            
                         />
                     })
 
                 }
 
-                {imageUrls.length > 3 && <div className="w-8 h-8 sm:w-[54px] sm:h-[54px] rounded-full bg-black text-white flex justify-center items-center text-[11px] sm:text-base leading-3 font-medium text-center">+{imageUrls.length - 3}<br />more</div>}
+                {imageUrls.length > 3 && layout !== "multipleThumbnail" && <div className="w-8 h-8 sm:w-[54px] sm:h-[54px] rounded-full bg-black text-white flex justify-center items-center text-[11px] sm:text-base leading-3 font-medium text-center">+{imageUrls.length - 3}<br />more</div>}
             </div>
 
 
